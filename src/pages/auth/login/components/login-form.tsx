@@ -62,7 +62,7 @@ export function LoginForm({
   })
   return (
     <div className={cn("flex flex-col gap-6 w-full", className)} {...props}>
-      <Card className=" shadow-md">
+      <Card className=" max-md:border-0 shadow-none md:shadow-md">
         <CardHeader className="text-center">
           <CardTitle className="text-lg md:text-2xl font-bold">
             Welcome backs{" "}
@@ -71,7 +71,7 @@ export function LoginForm({
             Please enter your details to sign in{" "}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="max-md:px-0">
           <Form {...form}>
             <form onSubmit={onSubmit}>
               <div className="flex flex-col gap-6 w-full">
