@@ -20,6 +20,11 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import z from "zod"
+import Api from "@/services"
+import { handleFormError } from "@/utils/form-error"
+import type { LoginResponse } from "@/@types/user"
+import { LOCALSTORAGE_SESSION_KEY } from "@/config"
+import { useNavigate } from "react-router"
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -38,7 +43,23 @@ export function LoginForm({
     },
   })
 
-  const onSubmit = form.handleSubmit(async () => {})
+  const navigate = useNavigate()
+  const onSubmit = form.handleSubmit(async (data) => {
+    try {
+      const response = await Api.post<LoginResponse>("/user/login", data)
+      window.localStorage.setItem(
+        LOCALSTORAGE_SESSION_KEY,
+        JSON.stringify({
+          ...response.data.data.item,
+          toke: response.data.data.token,
+        })
+      )
+
+      navigate("/")
+    } catch (error) {
+      handleFormError(error, form)
+    }
+  })
   return (
     <div className={cn("flex flex-col gap-6 w-full", className)} {...props}>
       <Card className=" shadow-md">
@@ -92,7 +113,12 @@ export function LoginForm({
                     )}
                   />
                 </div>
-                <Button size={"lg"} type="submit" className="w-full">
+                <Button
+                  loading={form.formState.isSubmitting}
+                  size={"lg"}
+                  type="submit"
+                  className="w-full"
+                >
                   Login
                 </Button>
                 <p className="text-red-500 text-center text-sm">
