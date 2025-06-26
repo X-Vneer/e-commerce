@@ -17,10 +17,27 @@ export const Header = () => {
   ]
 
   const [isOpen, setOpen] = useState(false)
+  const [banner, setBanner] = useState(true)
   const isAuthenticated = !!getSession()?.token
 
   return (
     <header className="w-full z-10 fixed top-0 left-0 bg-background border-b">
+      {banner && (
+        <div className="bg-black flex items-center py-2 text-white text-center px-2">
+          <div></div>
+          <div className="flex  justify-center w-full text-sm grow">
+            <p>Sign up and get 20% off to your first order. </p>
+            <span className="font-bold">Sign Up Now</span>
+          </div>
+          <Button
+            className="h-7 w-7"
+            variant="ghost"
+            onClick={() => setBanner(!banner)}
+          >
+            <X className="w-5 h-5" />
+          </Button>
+        </div>
+      )}
       <div className="container relative mx-auto py-4 flex gap-2 flex-row lg:grid lg:grid-cols-2 items-center">
         <div className="flex w-12 shrink lg:hidden items-end justify-end">
           <Button variant="ghost" onClick={() => setOpen(!isOpen)}>
