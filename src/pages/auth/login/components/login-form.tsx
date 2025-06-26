@@ -46,7 +46,7 @@ export function LoginForm({
   const navigate = useNavigate()
   const onSubmit = form.handleSubmit(async (data) => {
     try {
-      const response = await Api.post<LoginResponse>("/user/login", data)
+      const response = await Api.post<LoginResponse>("/auth/user/login", data)
       window.localStorage.setItem(
         LOCALSTORAGE_SESSION_KEY,
         JSON.stringify({
