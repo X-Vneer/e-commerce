@@ -80,9 +80,7 @@ export function SideModal({
       <DrawerContent
         className={` w-full ${sizeClasses[size]} rounded-none !border-0 flex flex-col bg-card `}
         onInteractOutside={(e) => {
-          if (!shouldCloseOnOverlayClick) {
-            e.preventDefault()
-          }
+          e.preventDefault()
         }}
       >
         <DrawerHeader className={cn("flex justify-between")}>

@@ -16,7 +16,7 @@ const Filters = () => {
         variant="outline"
         size={"icon"}
       >
-        <Settings2 className="size-7" />
+        <Settings2 strokeWidth={1.2} className="size-7" />
       </Button>
       <SideModal title="Filters" id="filters">
         <FiltersForm />

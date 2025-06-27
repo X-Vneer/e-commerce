@@ -46,9 +46,15 @@ const FiltersForm = () => {
             <FormItem>
               <FormLabel className="mb-10">Price</FormLabel>
               <FormControl>
-                <div onDrag={(e) => e.stopPropagation()}>
+                <div
+                  onPointerDown={(e) => e.stopPropagation()}
+                  onPointerMove={(e) => e.stopPropagation()}
+                  onPointerUp={(e) => e.stopPropagation()}
+                  onTouchStart={(e) => e.stopPropagation()}
+                  onTouchMove={(e) => e.stopPropagation()}
+                  onTouchEnd={(e) => e.stopPropagation()}
+                >
                   <DualRangeSlider
-                    onDrag={(e) => e.stopPropagation()}
                     label={(value) => value}
                     value={field.value}
                     onValueChange={field.onChange}
