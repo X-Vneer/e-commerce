@@ -40,10 +40,11 @@ export function PaginationWithLinks({
         items.push(
           <PaginationItem key={i}>
             <Button
+              size={"icon"}
               onClick={() => {
                 setPage(i)
               }}
-              variant={page === i ? "outline" : "link"}
+              variant={page === i ? "default" : "link"}
             >
               {i}
             </Button>
@@ -57,7 +58,7 @@ export function PaginationWithLinks({
             onClick={() => {
               setPage(1)
             }}
-            variant={page === 1 ? "outline" : "link"}
+            variant={page === 1 ? "default" : "link"}
           >
             1
           </Button>
@@ -79,10 +80,11 @@ export function PaginationWithLinks({
         items.push(
           <PaginationItem key={i}>
             <Button
+              size={"icon"}
               onClick={() => {
                 setPage(i)
               }}
-              variant={page === i ? "outline" : "link"}
+              variant={page === i ? "default" : "link"}
             >
               {i}
             </Button>
@@ -104,7 +106,7 @@ export function PaginationWithLinks({
             onClick={() => {
               setPage(totalPageCount)
             }}
-            variant={page === totalPageCount ? "outline" : "link"}
+            variant={page === totalPageCount ? "default" : "link"}
           >
             {totalPageCount}
           </Button>
