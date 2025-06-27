@@ -27,18 +27,21 @@ const categoryOptions = ["T-shirts", "Polo", "Jeans", "Shirts"]
 
 const FiltersForm = () => {
   const [initValues, set] = useQueryStates({
-    price: parseAsArrayOf(parseAsInteger).withDefault([0, 100]),
-    categories: parseAsArrayOf(parseAsString).withDefault([]),
+    "price[]": parseAsArrayOf(parseAsInteger).withDefault([0, 100]),
+    "category_ids[]": parseAsArrayOf(parseAsString).withDefault([]),
   })
   const form = useForm<{
-    price: number[]
+    "price[]": number[]
     all: boolean
-    categories: string[]
+    "category_ids[]": string[]
   }>({
-    defaultValues: { ...initValues, all: initValues.categories?.length === 4 },
+    defaultValues: {
+      ...initValues,
+      all: initValues["category_ids[]"]?.length === 4,
+    },
   })
   const all = form.watch("all")
-  const selected = form.watch("categories")
+  const selected = form.watch("category_ids[]")
 
   // Keep 'All' in sync with individual checkboxes
   useEffect(() => {
@@ -51,11 +54,14 @@ const FiltersForm = () => {
   }, [selected, all, form])
 
   const onSubmit = form.handleSubmit((values) => {
-    set({ price: values.price, categories: values.categories })
+    set({
+      "price[]": values["price[]"],
+      "category_ids[]": values["category_ids[]"],
+    })
   })
   const onClear = () => {
-    set({ price: [0, 100], categories: [] })
-    form.reset({ price: [0, 100], categories: [], all: false })
+    set({ "price[]": [0, 100], "category_ids[]": [] })
+    form.reset({ "price[]": [0, 100], "category_ids[]": [], all: false })
   }
   return (
     <Form {...form}>
@@ -68,7 +74,7 @@ const FiltersForm = () => {
             <AccordionContent>
               <FormField
                 control={form.control}
-                name="price"
+                name="price[]"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -116,7 +122,7 @@ const FiltersForm = () => {
                           onCheckedChange={(checked) => {
                             field.onChange(checked)
                             form.setValue(
-                              "categories",
+                              "category_ids[]",
                               checked ? categoryOptions : []
                             )
                           }}
@@ -132,7 +138,7 @@ const FiltersForm = () => {
                   <FormField
                     key={category}
                     control={form.control}
-                    name="categories"
+                    name="category_ids[]"
                     render={({ field }) => {
                       const isChecked = field.value?.includes(category)
                       return (
