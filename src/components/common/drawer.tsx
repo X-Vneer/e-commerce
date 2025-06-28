@@ -28,7 +28,6 @@ interface SideModalProps {
     | "6xl"
     | "7xl"
     | "full"
-  shouldCloseOnOverlayClick?: boolean
 }
 
 export function SideModal({
@@ -37,12 +36,11 @@ export function SideModal({
   children,
   description,
   size = "md",
-  shouldCloseOnOverlayClick = false,
 }: SideModalProps) {
   const { openModals, closeModal } = useModal()
   const isOpen = openModals.includes(id)
 
-  // Close on escape key (only for top modal)
+  // Close on escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
@@ -79,11 +77,8 @@ export function SideModal({
     >
       <DrawerContent
         className={` w-full ${sizeClasses[size]} rounded-none !border-0 flex flex-col bg-card `}
-        onInteractOutside={(e) => {
-          e.preventDefault()
-        }}
       >
-        <DrawerHeader className={cn("flex justify-between")}>
+        <DrawerHeader className={cn("flex justify-between border-b border-gray-200 shadow-sm")}>
           <div>
             <DrawerTitle>{title}</DrawerTitle>
             <DrawerDescription

@@ -3,8 +3,9 @@
 import { logo } from "@/assets"
 import { Button } from "@/components/ui/button"
 import { getSession } from "@/utils/get-session"
-import { Menu, MoveRight, Search, ShoppingCart, X } from "lucide-react"
-import { useState } from "react"
+import { logout } from "@/utils/logout"
+import { Menu, MoveRight, ShoppingCart, X } from "lucide-react"
+import { useState, useEffect } from "react"
 import { Link } from "react-router"
 
 export const Header = () => {
@@ -18,7 +19,26 @@ export const Header = () => {
 
   const [isOpen, setOpen] = useState(false)
   const [banner, setBanner] = useState(true)
-  const isAuthenticated = !!getSession()?.token
+  const [isAuthenticated, setIsAuthenticated] = useState(!!getSession()?.token)
+
+  // Listen for authentication changes
+  useEffect(() => {
+    const handleAuthChange = () => {
+      setIsAuthenticated(!!getSession()?.token)
+    }
+
+    // Listen for storage changes (when localStorage is updated)
+    window.addEventListener('storage', handleAuthChange)
+
+    // Listen for custom auth events
+    window.addEventListener('authChanged', handleAuthChange)
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('storage', handleAuthChange)
+      window.removeEventListener('authChanged', handleAuthChange)
+    }
+  }, [])
 
   return (
     <header className="w-full z-10 fixed top-0 left-0 bg-background border-b">
@@ -38,7 +58,7 @@ export const Header = () => {
           </Button>
         </div>
       )}
-      <div className="container relative mx-auto py-4 flex gap-2 flex-row lg:grid lg:grid-cols-2 items-center">
+      <div className="container relative mx-auto py-4 flex gap-2 flex-row lg:grid lg:grid-cols-2 items-center pr-4 md:pr-0">
         <div className="flex w-12 shrink lg:hidden items-end justify-end">
           <Button variant="ghost" onClick={() => setOpen(!isOpen)}>
             {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -66,35 +86,38 @@ export const Header = () => {
           )}
         </div>
         <div className="flex gap-4">
-          <img alt="logo" src={logo} className="shrink-0 w-20" />
+          <img alt="logo" src={logo} className="shrink-0 h-10" />
           <Link to={"/"}>
-            <Button className="rounded-sm max-md:hidden" variant="ghost">
+            <Button className="rounded-sm max-md:hidden text-black text-md font-semibold" variant="ghost">
               Products
             </Button>
           </Link>
 
-          <Button className="rounded-sm max-md:hidden">
+          <Button className="rounded-sm max-md:hidden  px-4 mt-1 h-9 text-sm">
             Sell Your Product
           </Button>
         </div>
         <div className="flex justify-end w-full gap-3">
-          <Link to={"/"}>
+          {/* <Link to={"/"}>
             <Button size={"icon"} variant="ghost" className=" rounded-sm">
               <Search className="size-5" />
             </Button>
-          </Link>
-          <Link to={"/cart"}>
-            <Button size={"icon"} variant="ghost" className=" rounded-sm">
-              <ShoppingCart className="size-5" />
-            </Button>
-          </Link>
+          </Link> */}
+                      <Link to={"/checkout"}>
+              <Button size={"icon"} variant="ghost" className=" rounded-sm">
+                <ShoppingCart className="size-6 mt-2 fill-black" />
+              </Button>
+            </Link>
           {isAuthenticated ? (
-            <Button variant={"outline"} className="rounded-sm">
+            <Button
+              variant={"outline"}
+              className="rounded-sm px-4 mt-1 h-9 text-sm"
+              onClick={() => logout()}>
               logout
             </Button>
           ) : (
             <Link to={"/auth/login"}>
-              <Button className="rounded-sm">login</Button>
+              <Button className="rounded-sm px-4 mt-1 h-9 text-sm">login</Button>
             </Link>
           )}
         </div>
